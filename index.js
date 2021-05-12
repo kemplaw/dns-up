@@ -64,7 +64,7 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
       let replaced = replaceAll(hosts, reg, '')
       let result = replaced + newUrlMapStr
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, result)
+      const res = await writeFile(WINDOWS_HOSTS_PATH, `${result}\n`)
 
       if (res) {
         console.log(`updated, result is ${result}`)

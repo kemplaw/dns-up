@@ -1,6 +1,6 @@
 {
   "name": "dns-up",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Update the DNS mapping in the hosts file",
   "main": "index.js",
   "bin": "index.js",
