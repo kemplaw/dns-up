@@ -1,0 +1,11 @@
+{
+  "name": "dns-up",
+  "version": "1.0.0",
+  "description": "dns updator",
+  "main": "index.js",
+  "author": "kemplaw",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.26.0"
+  }
+}
