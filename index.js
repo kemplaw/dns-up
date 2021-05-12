@@ -1,6 +1,12 @@
 const path = require('path')
 const { WINDOWS_HOSTS_PATH } = require('./config')
-const { getFile, getDnsIPv4, writeFile, replaceAll } = require('./utils')
+const {
+  getFile,
+  getDnsIPv4,
+  writeFile,
+  replaceAll,
+  flushdns,
+} = require('./utils')
 const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
 
 ;(async () => {
@@ -21,13 +27,13 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     // 匹配url
     const reg = genUrlWithIPv4Reg(url, 'ig')
     const matchedLines = hosts.match(reg)
-    const newUrlMapStr = `\n${ipv4} ${url}`
+    const newUrlMapStr = `${ipv4} ${url}`
 
     // 无匹配结果，直接新增
     if (!matchedLines || matchedLines.length === 0) {
       console.log('no matched, will append')
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, newUrlMapStr, {
+      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}`, {
         flags: 'a',
       })
 
@@ -48,6 +54,13 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
       if (res) {
         console.log(`updated, result is ${result}`)
       }
+    }
+
+    // 替换之后执行更新dns命令
+    const isFlushdns = await flushdns()
+
+    if (isFlushdns) {
+      console.log('dns flush sucessfully')
     }
   } catch (error) {
     console.warn(error)

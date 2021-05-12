@@ -1,5 +1,7 @@
 const fs = require('fs')
 const dns = require('dns')
+const axios = require('axios')
+const cheerio = require('cheerio')
 
 /**
  * @description: 获取文件读取流
@@ -28,15 +30,16 @@ function getFile(path) {
  * @return {*}
  */
 function getDnsIPv4(url) {
-  return new Promise((resolve, reject) =>
-    dns.lookup(url, { family: 4 }, (err, addr) => {
-      if (err) {
-        return reject(err)
-      }
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`https://${url}.ipaddress.com/`)
+      .then(({ data }) => {
+        let $ = cheerio.load(data)
 
-      resolve(addr)
-    })
-  )
+        resolve($('.panel-item .comma-separated').first().text())
+      })
+      .catch((err) => reject(err))
+  })
 }
 
 /**
@@ -57,6 +60,13 @@ function writeFile(path, data, { flags = 'w', ...rest } = {}) {
   })
 }
 
+/**
+ * @description: 替换所有
+ * @param {*} str
+ * @param {*} reg
+ * @param {*} replaced
+ * @return {*}
+ */
 function replaceAll(str, reg, replaced) {
   if (!reg) return str
 
@@ -70,8 +80,28 @@ function replaceAll(str, reg, replaced) {
   return newStr
 }
 
+/**
+ * @description: 刷新dns缓存
+ */
+function flushdns() {
+  const cmd = 'ipconfig/flushdns'
+
+  return new Promise((resolve, reject) => {
+    var process = require('child_process')
+
+    process.exec(cmd, (err, stdout, stderr) => {
+      if (err || stderr) {
+        return reject(err || stderr)
+      }
+
+      resolve(stdout)
+    })
+  })
+}
+
 module.exports = {
   getFile,
+  flushdns,
   writeFile,
   getDnsIPv4,
   replaceAll,
