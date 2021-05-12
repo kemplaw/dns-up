@@ -46,6 +46,13 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
       if (res) {
         console.log(`hosts updated! result is ${newUrlMapStr}`)
 
+        // 替换之后执行更新dns命令
+        const isFlushdns = await flushdns()
+
+        if (isFlushdns) {
+          console.log('dns flush sucessfully')
+        }
+
         return
       }
     }
