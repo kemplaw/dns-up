@@ -30,8 +30,13 @@ function getFile(path) {
  */
 function getDnsIPv4(url) {
   return new Promise((resolve, reject) => {
+    const isNet = /\.net/gi
+    const baseUrl = isNet.test(url)
+      ? `https://fastly.net.ipaddress.com/${url}`
+      : `https://${url}.ipaddress.com/`
+
     axios
-      .get(`https://${url}.ipaddress.com/`)
+      .get(baseUrl)
       .then(({ data }) => {
         let $ = cheerio.load(data)
 
@@ -98,8 +103,14 @@ function flushdns() {
   })
 }
 
+// 获取命令行参数
+function getArgs() {
+  return process.argv.slice(2)
+}
+
 module.exports = {
   getFile,
+  getArgs,
   flushdns,
   writeFile,
   getDnsIPv4,

@@ -6,6 +6,7 @@ const {
   writeFile,
   replaceAll,
   flushdns,
+  getArgs,
 } = require('./utils')
 const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
 
@@ -17,7 +18,12 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     if (hosts === undefined) throw new Error('could not find valid hosts file!')
 
     // 获取 ipv4 地址
-    const url = 'github.com'
+    const [url] = getArgs()
+
+    if (!url) throw new Error('valid url required!')
+
+    console.log(`mapping url is ${url}`)
+
     const ipv4 = await getDnsIPv4(url)
 
     if (!ipv4 || !isIPv4.test(ipv4)) {
