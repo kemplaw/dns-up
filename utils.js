@@ -1,5 +1,4 @@
 const fs = require('fs')
-const dns = require('dns')
 const axios = require('axios')
 const cheerio = require('cheerio')
 
