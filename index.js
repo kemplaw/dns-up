@@ -41,7 +41,7 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     if (!matchedLines || matchedLines.length === 0) {
       console.log('no matched, will append')
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}\n`, {
+      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}`, {
         flags: 'a',
       })
 
@@ -64,7 +64,7 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
       let replaced = replaceAll(hosts, reg, '')
       let result = replaced + newUrlMapStr
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, `${result}\n`)
+      const res = await writeFile(WINDOWS_HOSTS_PATH, result)
 
       if (res) {
         console.log(`updated, result is ${result}`)
@@ -77,7 +77,7 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     if (isFlushdns) {
       console.log('dns flush sucessfully')
     }
-  } catch (error) {
-    console.warn(error)
+  } catch ({ reason }) {
+    console.warn(`update failed, the reson is ${reason}`)
   }
 })()
