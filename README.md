@@ -1,5 +1,7 @@
 # dns-up
 
+![dns-ups](https://img.shields.io/npm/v/dns-up)
+
 Update the DNS mapping in the hosts file
 
 ### Install
