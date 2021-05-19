@@ -77,7 +77,9 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     if (isFlushdns) {
       console.log('dns flush sucessfully')
     }
-  } catch ({ reason }) {
-    console.warn(`update failed, the reson is ${reason}`)
+  } catch (err) {
+    const { reason, code } = err
+
+    console.warn(`update failed, the reason is ${reason || code}`)
   }
 })()
