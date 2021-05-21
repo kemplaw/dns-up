@@ -4,13 +4,13 @@ const path = require('path')
 const { WINDOWS_HOSTS_PATH } = require('./config')
 const {
   getFile,
-  getDnsIPv4,
   writeFile,
   replaceAll,
   flushdns,
   getArgs,
+  getIpByDnsLookUp,
 } = require('./utils')
-const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
+const { isIPv4, genUrlWithIPv4Reg, isSiteAddress } = require('./regexp')
 
 ;(async () => {
   try {
@@ -22,11 +22,11 @@ const { isIPv4, genUrlWithIPv4Reg } = require('./regexp')
     // 获取 ipv4 地址
     const [url] = getArgs()
 
-    if (!url) throw new Error('valid url required!')
+    if (!isSiteAddress.test(url)) throw new Error('valid url required!')
 
     console.log(`mapping url is ${url}`)
 
-    const ipv4 = await getDnsIPv4(url)
+    const ipv4 = await getIpByDnsLookUp(url)
 
     if (!ipv4 || !isIPv4.test(ipv4)) {
       throw new Error('could not find valid ipv4 address')

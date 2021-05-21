@@ -1,6 +1,7 @@
 const fs = require('fs')
 const axios = require('axios')
 const cheerio = require('cheerio')
+const dns = require('dns')
 
 /**
  * @description: 获取文件读取流
@@ -24,11 +25,11 @@ function getFile(path) {
 }
 
 /**
- * @description: 获取 ipv4 地址
+ * @description: 获取 ipv4 地址（从 ipaddress 获取）
  * @param {*} url
  * @return {*}
  */
-function getDnsIPv4(url) {
+function getIpByIpAddress(url) {
   return new Promise((resolve, reject) => {
     const isNet = /\.net/gi
     const baseUrl = isNet.test(url)
@@ -43,6 +44,23 @@ function getDnsIPv4(url) {
         resolve($('.panel-item .comma-separated').first().text())
       })
       .catch((err) => reject(err))
+  })
+}
+
+/**
+ * @description: 获取 ipv4 地址（从nslookup获取）
+ * @param {string} url
+ * @return {*}
+ */
+function getIpByDnsLookUp(url) {
+  return new Promise((resolve, reject) => {
+    dns.lookup(url, { family: 4 }, (err, addr, family) => {
+      if (err) return reject(err)
+
+      if (family !== 4) return reject('not supported url')
+
+      resolve(addr)
+    })
   })
 }
 
@@ -113,6 +131,7 @@ module.exports = {
   getArgs,
   flushdns,
   writeFile,
-  getDnsIPv4,
+  getIpByIpAddress,
   replaceAll,
+  getIpByDnsLookUp,
 }

@@ -14,7 +14,10 @@ const genUrlWithIPv4Reg = (url, flags) => {
   )
 }
 
+const isSiteAddress = /^([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/
+
 module.exports = {
   isIPv4,
+  isSiteAddress,
   genUrlWithIPv4Reg,
 }
