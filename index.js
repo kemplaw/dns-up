@@ -62,7 +62,7 @@ const { isIPv4, genUrlWithIPv4Reg, isSiteAddress } = require('./regexp')
     // 有匹配结果，替换之后新增
     if (matchedLines.length) {
       let replaced = replaceAll(hosts, reg, '')
-      let result = replaced + newUrlMapStr
+      let result = replaced + `\n${newUrlMapStr}`
 
       const res = await writeFile(WINDOWS_HOSTS_PATH, result)
 
