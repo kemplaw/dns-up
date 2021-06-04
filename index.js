@@ -41,7 +41,7 @@ const { isIPv4, genUrlWithIPv4Reg, isSiteAddress } = require('./regexp')
     if (!matchedLines || matchedLines.length === 0) {
       console.log('no matched, will append')
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}\n`, {
+      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}`, {
         flags: 'a',
       })
 
