@@ -99,7 +99,7 @@ function replaceAll(str, reg, replaced) {
     newStr = str.replace(reg, replaced)
   })
 
-  return newStr
+  return newStr.trim()
 }
 
 /**

@@ -35,13 +35,13 @@ const { isIPv4, genUrlWithIPv4Reg, isSiteAddress } = require('./regexp')
     // 匹配url
     const reg = genUrlWithIPv4Reg(url, 'ig')
     const matchedLines = hosts.match(reg)
-    const newUrlMapStr = `${ipv4} ${url}`
+    const newUrlMapStr = `\n${ipv4} ${url}`
 
     // 无匹配结果，直接新增
     if (!matchedLines || matchedLines.length === 0) {
       console.log('no matched, will append')
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, `\n${newUrlMapStr}\n`, {
+      const res = await writeFile(WINDOWS_HOSTS_PATH, newUrlMapStr, {
         flags: 'a',
       })
 
@@ -62,9 +62,9 @@ const { isIPv4, genUrlWithIPv4Reg, isSiteAddress } = require('./regexp')
     // 有匹配结果，替换之后新增
     if (matchedLines.length) {
       let replaced = replaceAll(hosts, reg, '')
-      let result = replaced + newUrlMapStr
+      let result = `${replaced}\n${newUrlMapStr}`
 
-      const res = await writeFile(WINDOWS_HOSTS_PATH, `${result}\n`)
+      const res = await writeFile(WINDOWS_HOSTS_PATH, `${result}`)
 
       if (res) {
         console.log(`updated, result is ${result}`)
